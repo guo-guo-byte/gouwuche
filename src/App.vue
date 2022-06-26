@@ -1,28 +1,45 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="app">
+    <MyHeader title="购物车案例" background="yellow" color="red"></MyHeader>
+
+    <MyGoods v-for="item in gootList" :key="item.gods_id" :goods=item></MyGoods>
+    <MyFooter :gootList="gootList"></MyFooter>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import MyFooter from '@/components/MyFooter.vue'
+import MyGoods from '@/components/MyGoods.vue'
+import MyHeader from '@/components/MyHeader.vue'
+import axios from 'axios'
 export default {
-  name: 'App',
   components: {
-    HelloWorld
+    MyFooter,
+    MyGoods,
+    MyHeader
+  },
+  data() {
+    return {
+      gootList: []
+    }
+  },
+  created() {
+    this.hanshu()
+  },
+  methods: {
+    async hanshu() {
+      const res = await axios({
+        url: 'api/cart'
+      })
+      console.log(res.data.list)
+      this.gootList = res.data.list
+    }
   }
 }
 </script>
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style>
+.app {
+  padding: 50px 0;
 }
 </style>
